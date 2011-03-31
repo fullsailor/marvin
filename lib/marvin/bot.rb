@@ -37,18 +37,17 @@ module Marvin
       @room = @campfire.rooms.first
       @room.join
       say "Mornin!"
-      self
+      puts "Marvin joined the room"
     end
 
     def leave_room! 
       say "Goodbye forever"
       @room.leave
-      self
+      puts "Marvin left the room"
     end
 
     def say(text)
       @room.speak(text)
-      self
     end
 
     def user_id
@@ -59,10 +58,18 @@ module Marvin
 
     def handle_message(message)
       case message[:body]
-      when /^marvin\ /i
+      when /^marvin,? who am i\??/i
+        say "You're #{@room.user(message[:user_id])[:name]}"
+      when /^marvin,?\ /i
         say "Are you talking to me?"
-      when /marvin/i
+      when /\ marvin\ /i
         say "Are you talking about me?"
+      when /^night?time!?/i
+        say "Daytime!"
+      when /^daytime!?/i
+        say "Nighttime!"
+      when /shut\ ?up marvin!?/i
+        say "You shut up!"
       when /^y/i
         say "Fantastic!"
       when /^n/i
