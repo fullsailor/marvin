@@ -1,34 +1,8 @@
-require 'bundler'
-Bundler.setup
-
 require 'tinder'
 require 'yajl'
 require 'yajl/http_stream'
-require 'yaml'
 
 module Marvin
-
-
-  def self.configure
-    config = YAML.load_file('./config.yml')
-    @@token = config['token']
-    @@subdomain = config['subdomain']
-  end
-
-  def self.token
-    @@token
-  end
-
-  def self.subdomain
-    @@subdomain
-  end
-
-  def self.lives!
-    mb = Marvin::Bot.new
-    sleep(2)
-    mb.run
-  end
-
   class Bot
 
     def initialize
@@ -90,8 +64,4 @@ module Marvin
     end
 
   end
-
 end
-
-Marvin.configure
-Marvin.lives!

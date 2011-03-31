@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.setup
+
+$LOAD_PATH << File.expand_path((File.dirname(__FILE__) + '/../lib'))
+
+require 'marvin'
+
+Marvin.configure
+Marvin.lives!
