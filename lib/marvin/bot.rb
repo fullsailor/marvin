@@ -18,11 +18,15 @@ module Marvin
 
     def run
       Yajl::HttpStream.get(room_uri, :symbolize_keys => true) do |message|
-        case message[:type]
-        when 'TextMessage'
-          handle_message(message)
-        else
-          puts "not processing #{message[:type]}"
+        unless message[:user_id] == user_id
+          @start_time = Time.now
+          case message[:type]
+          when 'TextMessage'
+            handle_message(message)
+          else
+            puts "not processing #{message[:type]}"
+          end
+          puts "- #{(1000 * (Time.now - @start_time)).to_i}s"
         end
       end
     ensure
@@ -47,6 +51,9 @@ module Marvin
       self
     end
 
+    def user_id
+      @user_id ||= @campfire.me[:id]
+    end
 
     private
 
