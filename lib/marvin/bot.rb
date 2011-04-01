@@ -24,9 +24,9 @@ module Marvin
           when 'TextMessage'
             handle_message(message)
           else
-            puts "not processing #{message[:type]}"
+            Marvin.logger.debug "not processing #{message[:type]}"
           end
-          puts "- #{(1000 * (Time.now - @start_time)).to_i}s"
+          Marvin.logger.debug "- #{(1000 * (Time.now - @start_time)).to_i}s"
         end
       end
     ensure
@@ -37,13 +37,13 @@ module Marvin
       @room = @campfire.rooms.first
       @room.join
       say "Mornin!"
-      puts "Marvin joined the room"
+      Marvin.logger.info "Marvin joined #{@room.name}" 
     end
 
     def leave_room! 
       say "Goodbye forever"
       @room.leave
-      puts "Marvin left the room"
+      Marvin.logger.info "Marvin left #{@room.name}" 
     end
 
     def say(text)

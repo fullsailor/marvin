@@ -1,5 +1,6 @@
 require 'yaml'
 require 'marvin/bot'
+require 'active_support/buffered_logger'
 
 module Marvin
 
@@ -22,4 +23,7 @@ module Marvin
     mb.run
   end
 
+  def self.logger
+    @@logger ||= ActiveSupport::BufferedLogger.new('log/marvin.log')
+  end
 end
