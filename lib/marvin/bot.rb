@@ -54,26 +54,44 @@ module Marvin
       @user_id ||= @campfire.me[:id]
     end
 
+    def memory
+      @memory ||= Marvin::Memory.new
+    end
+
     private
 
     def handle_message(message)
-      case message[:body]
-      when /^marvin,? who am i\??/i
-        say "You're #{@room.user(message[:user_id])[:name]}"
-      when /^marvin,?\ /i
-        say "Are you talking to me?"
-      when /\ marvin\ /i
-        say "Are you talking about me?"
-      when /^night?time!?/i
-        say "Daytime!"
-      when /^daytime!?/i
-        say "Nighttime!"
-      when /shut\ ?up marvin!?/i
-        say "You shut up!"
-      when /^y/i
-        say "Fantastic!"
-      when /^n/i
-        say "Well why not?"
+      if /^marvin(,\ ?|\ )(?<command>.*)/i =~ message[:body]
+        case command
+        when /who am i\??/i
+          say "You're #{@room.user(message[:user_id])[:name]}"
+        when /remember (.*) is (.*)/
+          memory.remember $1, $2
+          say "Okay, I've got it" 
+        when /remember (.*)/
+          if result = memory.remember($1)
+            say result
+          else
+            say "Nope, I don't remember that."
+          end
+        else
+          say "Are you talking to me?"
+        end
+      else
+        case message[:body]
+        when /\ marvin\ /i
+          say "Are you talking about me?"
+        when /^night?time!?/i
+          say "Daytime!"
+        when /^daytime!?/i
+          say "Nighttime!"
+        when /shut\ ?up marvin!?/i
+          say "You shut up!"
+        when /^y/i
+          say "Fantastic!"
+        when /^n/i
+          say "Well why not?"
+        end
       end
     end
 

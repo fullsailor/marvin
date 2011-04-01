@@ -1,8 +1,10 @@
 require 'yaml'
-require 'marvin/bot'
 require 'active_support/buffered_logger'
 
 module Marvin
+
+  autoload :Bot, 'marvin/bot'
+  autoload :Memory, 'marvin/memory'
 
   def self.configure
     config = YAML.load_file('./config.yml')
