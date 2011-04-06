@@ -1,5 +1,6 @@
 require 'yaml'
 require 'active_support/buffered_logger'
+require 'pathname'
 
 module Marvin
 
@@ -7,7 +8,7 @@ module Marvin
   autoload :Memory, 'marvin/memory'
 
   def self.configure
-    config = YAML.load_file('./config.yml')
+    config = YAML.load_file(root.join('config.yml'))
     @@token = config['token']
     @@subdomain = config['subdomain']
   end
@@ -27,5 +28,9 @@ module Marvin
 
   def self.logger
     @@logger ||= ActiveSupport::BufferedLogger.new('log/marvin.log')
+  end
+
+  def self.root
+    @@root ||= Pathname.new(File.dirname(__FILE__)+'/..').expand_path
   end
 end

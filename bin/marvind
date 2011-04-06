@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.setup
+require 'daemons'
+
+Daemons.run(File.expand_path((File.dirname(__FILE__) + '/marvin')))
