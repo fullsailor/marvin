@@ -65,12 +65,12 @@ module Marvin
         case command
         when /who am i\??/i
           say "You're #{@room.user(message[:user_id])[:name]}"
-        when /remember (.*) is (.*)/
+        when /remember (.*) is|are (.*)/
           memory.remember $1, $2
           say "Okay, I've got it" 
-        when /remember (.*)/
+        when /remember (.*)\??/
           if result = memory.remember($1)
-            say result
+            say "#{$1} is #{result}"
           else
             say "Nope, I don't remember that."
           end
