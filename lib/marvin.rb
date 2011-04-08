@@ -27,7 +27,7 @@ module Marvin
   end
 
   def self.logger
-    @@logger ||= ActiveSupport::BufferedLogger.new('log/marvin.log')
+    @@logger ||= ActiveSupport::BufferedLogger.new(root.join('log/marvin.log'))
   end
 
   def self.root
