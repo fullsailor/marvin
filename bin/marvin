@@ -16,5 +16,13 @@ $LOAD_PATH << File.expand_path((File.dirname(__FILE__) + '/../lib'))
 
 require 'marvin'
 
-Marvin.configure
-Marvin.lives!
+# Configure Marvin & boot him up
+begin
+  Marvin.configure
+  Marvin.lives!
+# In the case of an error, add it to the logs
+rescue Exception => e
+  Marvin.logger.error e.message
+  # Re-raise the error so that the program exits
+  raise e
+end
