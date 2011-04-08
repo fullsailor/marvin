@@ -1,8 +1,17 @@
 #!/usr/bin/env ruby
 
-require 'bundler'
-Bundler.setup
+# Setup Bundler with Marvin's Gemfile
+gemfile = File.expand_path('../../Gemfile', __FILE__)
+begin
+  ENV['BUNDLE_GEMFILE'] = gemfile
+  require 'bundler'
+  Bundler.setup
+rescue Bundler::GemNotFound => e
+  STDERR.puts e.message
+  STDERR.puts 'Try running `bundle install`.'
+end
 
+# Add the lib directory to the load path. This is where marvin lives 
 $LOAD_PATH << File.expand_path((File.dirname(__FILE__) + '/../lib'))
 
 require 'marvin'
