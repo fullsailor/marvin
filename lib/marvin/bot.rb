@@ -74,6 +74,18 @@ module Marvin
           else
             say "Nope, I don't remember that."
           end
+        when /crash!?/
+          if message[:user_id] == "662661"
+            raise "Creator Forced Crash"
+          else
+            say "Going down in 3.."
+            sleep 1
+            say "2.."
+            sleep 1
+            say "1.."
+            sleep 1
+            say "Hah! I can only be crashed by my creator!"
+          end
         else
           say "Are you talking to me?"
         end
