@@ -1,6 +1,7 @@
 require 'tinder'
 require 'yajl'
 require 'yajl/http_stream'
+require 'active_support/inflector'
 
 module Marvin
   class Bot
@@ -58,19 +59,22 @@ module Marvin
       @memory ||= Marvin::Memory.new
     end
 
-    private
-
     def handle_message(message)
       if /^marvin(,\ ?|\ )(?<command>.*)/i =~ message[:body]
         case command
         when /who am i\??/i
           say "You're #{@room.user(message[:user_id])[:name]}"
-        when /remember (.*) is|are (.*)/
-          memory.remember $1, $2
+        when /remember (.*) (is|are) (.*)/
+          memory.remember $1, $3
           say "Okay, I've got it" 
-        when /remember (.*)\??/
+        when /remember (.*)/
           if result = memory.remember($1)
-            say "#{$1} is #{result}"
+            if $1 == ActiveSupport::Inflector.pluralize($1)
+              verb = 'are'
+            else
+              verb = 'is'
+            end
+            say "#{$1} #{verb} #{result}"
           else
             say "Nope, I don't remember that."
           end
@@ -86,6 +90,8 @@ module Marvin
             sleep 1
             say "Hah! I can only be crashed by my creator!"
           end
+        when /shut\ ?up!?/
+          say "You shut up!"
         else
           say "Are you talking to me?"
         end
@@ -99,9 +105,9 @@ module Marvin
           say "Nighttime!"
         when /shut\ ?up marvin!?/i
           say "You shut up!"
-        when /^y/i
+        when /^yes|yep|yessir/i
           say "Fantastic!"
-        when /^n/i
+        when /^no/i
           say "Well why not?"
         end
       end
