@@ -11,6 +11,7 @@ module Marvin
     config = YAML.load_file(root.join('config.yml'))
     @@token = config['token']
     @@subdomain = config['subdomain']
+    @@room = config['room']
   end
 
   def self.token
@@ -19,6 +20,10 @@ module Marvin
 
   def self.subdomain
     @@subdomain
+  end
+
+  def self.room
+    @@room
   end
 
   def self.lives!

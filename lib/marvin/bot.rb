@@ -6,9 +6,18 @@ require 'active_support/inflector'
 module Marvin
   class Bot
 
+
     def initialize
       @campfire = Tinder::Campfire.new( Marvin.subdomain, :token => Marvin.token )
       join_room!
+    end
+
+    def mouth
+      @mouth ||= Mouth.new
+    end
+
+    def ears
+      @ears ||= Ears.new
     end
 
     def room_uri
@@ -19,6 +28,13 @@ module Marvin
 
     def run
       Yajl::HttpStream.get(room_uri, :symbolize_keys => true) do |message|
+        # ignores his own messages
+        unless message[:user_id] == user_id
+          self.respond_to(message)
+        end
+        @env = Marvin::Environment.new
+        @env.message = message 
+
         unless message[:user_id] == user_id
           @start_time = Time.now
           case message[:type]
@@ -34,8 +50,18 @@ module Marvin
       leave_room!
     end
 
+    def respond_to(message)
+      interaction = Marvin::Interaction.new
+      interaction.message = message
+      
+    end
+
+    def behaviors
+
+    end
+
     def join_room!
-      @room = @campfire.rooms.first
+      @room = @campfire.find_room_by_name(Marvin.room)
       @room.join
       say "Mornin!"
       Marvin.logger.info "Marvin joined #{@room.name}" 

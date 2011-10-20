@@ -31,6 +31,27 @@ class NightTimeDayTimeBehavior < Marvin::Behavior
 
 end
 
+module Marvin
+  class Behavior
+
+    def self.condition
+
+    end
+
+  end
+end
+
+
+Marvin::Logic.draw do
+
+  scope /^marvin,?\ ?/ do
+    
+    match "crash" => :crash!, :allow => [:!]
+  end
+
+  match /nighttime|daytime/ => :nighttime_daytime
+end
+
 
 
 # Actions
